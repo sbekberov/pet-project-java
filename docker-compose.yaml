@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  postgresqldb:
+    container_name: db_afpm
+    image: "postgres"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: bekberov
+      POSTGRES_DB: trello_app
+    volumes:
+      - /mnt/db:/var/lib/postgresql/data
+  app:
+    container_name: afpm
+    image: sbekberov/afpm:latest
+    ports:
+      - "8888:8888"
+    depends_on:
+      - postgresqldb
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresqldb:5432/trello_app
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: bekberov
+    volumes:
+      - /mnt/app:/app
+
+
